@@ -8,8 +8,32 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-outfit);
   --font-mono: var(--font-geist-mono);
+
+  /* CarePlus Theme Colors */
+  --color-primary: #00A693;
+  /* Teal Green */
+  --color-primary-dark: #008B7A;
+  --color-secondary: #FF4D4D;
+  /* Soft Red */
+  --color-secondary-dark: #E60000;
+  --color-accent: #2C2C2C;
+  /* Dark Black/Gray */
+
+  --animate-spotlight: spotlight 2s ease .75s 1 forwards;
+
+  @keyframes spotlight {
+    0% {
+      opacity: 0;
+      transform: translate(-72%, -62%) scale(0.5);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translate(-50%, -40%) scale(1);
+    }
+  }
 }
 
 @media (prefers-color-scheme: dark) {
