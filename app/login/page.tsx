@@ -29,7 +29,7 @@ export default function LoginPage() {
             >
               <div className="relative h-12 w-[160px]">
                 <Image
-                  src="/careplus.png"
+                  src="/logo.png"
                   alt="CarePlus Logo"
                   fill
                   className="object-contain object-left"
