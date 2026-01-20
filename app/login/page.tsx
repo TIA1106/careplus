@@ -12,7 +12,7 @@ export default function LoginPage() {
     <main className="relative flex h-screen w-full items-center justify-center overflow-hidden bg-black/50 backdrop-blur-xl p-4">
       {/* Backdrop Blur Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-900/80 via-black/60 to-gray-900/80 backdrop-blur-2xl" />
-      
+
       {/* Popup Modal */}
       <motion.div
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -44,7 +44,7 @@ export default function LoginPage() {
                 d="M0,64L48,69.3C96,75,192,85,288,80C384,75,480,53,576,48C672,43,768,53,864,58.7C960,64,1056,64,1152,58.7C1248,53,1344,43,1392,37.3L1440,32L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"
               ></path>
             </svg>
-            
+
             {/* Logo Circle */}
             <div className="absolute top-6 left-1/2 -translate-x-1/2 z-10">
               <div className="h-20 w-20 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 shadow-lg flex items-center justify-center">
