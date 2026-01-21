@@ -10,6 +10,7 @@ declare module "next-auth" {
       isProfileComplete?: boolean;
       experience?: number;
       specializations?: string[];
+      image?: string | null;
     };
   }
 }
@@ -23,5 +24,6 @@ declare module "next-auth/jwt" {
     isProfileComplete?: boolean;
     experience?: number;
     specializations?: string[];
+    image?: string | null;
   }
 }

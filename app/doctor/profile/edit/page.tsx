@@ -270,26 +270,8 @@ export default function DoctorProfileEditPage() {
                 {/* Header */}
                 <div className="mb-8 flex items-center justify-between">
                     <div>
-                        <h1 className="text-3xl font-black text-gray-900 tracking-tight">Edit Your Profile</h1>
+                        <h1 className="text-3xl font-black text-gray-900 tracking-tight">Edit Profile</h1>
                         <p className="mt-2 text-gray-500 font-medium">Keep your professional information and clinics up to date</p>
-                    </div>
-                    <div className="flex gap-2">
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={() => router.push("/doctor/dashboard")}
-                            className="px-4 py-2 rounded-lg text-sm font-semibold text-teal-600 bg-teal-50 hover:bg-teal-100 transition-colors"
-                        >
-                            Back to Dashboard
-                        </motion.button>
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={() => signOut({ callbackUrl: "/login" })}
-                            className="px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-200 transition-colors"
-                        >
-                            Sign Out
-                        </motion.button>
                     </div>
                 </div>
 
