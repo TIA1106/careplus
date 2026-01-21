@@ -1,11 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { signIn } from "next-auth/react";
-import { X } from "lucide-react";
+import { X, User, Stethoscope } from "lucide-react";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -13,6 +13,20 @@ interface AuthModalProps {
 }
 
 export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
+  const [role, setRole] = useState<"patient" | "doctor">("patient");
+
+  const handleSignIn = async () => {
+    // Set the intended role cookie BEFORE sign-in
+    // This cookie will be read by the auth handler to determine user type
+    document.cookie = `careplus.intended-role=${role}; path=/; max-age=600; samesite=lax`;
+    
+    // Redirect to appropriate dashboard after sign-in
+    const callbackUrl = role === "doctor" ? "/doctor/dashboard" : "/patient/dashboard";
+    
+    // Use the standard auth endpoint (single callback URL)
+    signIn("google", { callbackUrl });
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -62,7 +76,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                     ></path>
                   </svg>
 
-                  {/* Logo - No background, 250% size */}
+                  {/* Logo */}
                   <div className="absolute top-6 left-1/2 -translate-x-1/2 z-10">
                     <div className="relative h-32 w-32">
                       <Image
@@ -84,13 +98,39 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                       Sign In or Sign Up
                     </h1>
                     <p className="text-sm text-gray-500 mt-2">
-                      Continue to easily book doctor&apos;s appointments online.
+                      Select your role to continue
                     </p>
+                  </div>
+
+                  {/* Role Selector Tabs */}
+                  <div className="flex p-1 bg-gray-100 rounded-xl mb-6">
+                    <button
+                      onClick={() => setRole("patient")}
+                      className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-semibold rounded-lg transition-all ${
+                        role === "patient"
+                          ? "bg-white text-blue-600 shadow-sm"
+                          : "text-gray-500 hover:text-gray-700"
+                      }`}
+                    >
+                      <User className="h-4 w-4" />
+                      Patient
+                    </button>
+                    <button
+                      onClick={() => setRole("doctor")}
+                      className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-semibold rounded-lg transition-all ${
+                        role === "doctor"
+                          ? "bg-white text-blue-600 shadow-sm"
+                          : "text-gray-500 hover:text-gray-700"
+                      }`}
+                    >
+                      <Stethoscope className="h-4 w-4" />
+                      Doctor
+                    </button>
                   </div>
 
                   {/* Google Sign In Button */}
                   <motion.button
-                    onClick={() => signIn("google", { callbackUrl: "/" })}
+                    onClick={handleSignIn}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     type="button"
@@ -118,7 +158,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                         d="M24 48c6.2 0 11.4-2 15.2-5.5l-7.1-5.5c-2 1.4-4.5 2.2-8.1 2.2-6.1 0-11.4-3.9-13.3-9.4l-8.1 6.3C6.5 42.6 14.6 48 24 48z"
                       />
                     </svg>
-                    Sign in with Google
+                    Sign in as {role === "patient" ? "Patient" : "Doctor"}
                   </motion.button>
 
                   <p className="text-center text-xs text-gray-400 mt-4">

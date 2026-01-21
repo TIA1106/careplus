@@ -3,46 +3,38 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
-import { signIn } from "next-auth/react";
+import { motion } from "framer-motion";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { X, User, Stethoscope } from "lucide-react";
 
 export default function LoginPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [role, setRole] = useState<"patient" | "doctor">("patient");
 
-  const handleSignIn = async () => {
-    if (role === "doctor") {
-      // Use default /api/auth
-      signIn("google", { callbackUrl: "/doctor/dashboard" });
-    } else {
-      // Use /api/patient/auth
-      // We need to perform a POST with CSRF token to isolate correctly
-      try {
-        const res = await fetch("/api/patient/auth/csrf");
-        const { csrfToken } = await res.json();
-
-        const form = document.createElement("form");
-        form.method = "POST";
-        form.action = "/api/patient/auth/signin/google";
-
-        const csrfInput = document.createElement("input");
-        csrfInput.type = "hidden";
-        csrfInput.name = "csrfToken";
-        csrfInput.value = csrfToken;
-        form.appendChild(csrfInput);
-
-        const callbackInput = document.createElement("input");
-        callbackInput.type = "hidden";
-        callbackInput.name = "callbackUrl";
-        callbackInput.value = "/";
-        form.appendChild(callbackInput);
-
-        document.body.appendChild(form);
-        form.submit();
-      } catch (error) {
-        console.error("Patient sign-in error:", error);
+  // Auto-redirect if already authenticated
+  React.useEffect(() => {
+    if (status === "authenticated") {
+      const userRole = session?.user?.role;
+      if (userRole === "doctor") {
+        router.push(session.user.isProfileComplete ? "/doctor/dashboard" : "/doctor/profile");
+      } else if (userRole === "patient") {
+        router.push("/patient/dashboard");
       }
     }
+  }, [status, session, router]);
+
+  const handleSignIn = async () => {
+    // Set the intended role cookie BEFORE sign-in
+    // This cookie will be read by the auth handler to determine user type
+    document.cookie = `careplus.intended-role=${role}; path=/; max-age=600; samesite=lax`;
+    
+    // Redirect to appropriate dashboard after sign-in
+    const callbackUrl = role === "doctor" ? "/doctor/dashboard" : "/patient/dashboard";
+    
+    // Use the standard auth endpoint (single callback URL)
+    signIn("google", { callbackUrl });
   };
 
   return (

@@ -1,21 +1,28 @@
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import ClientHero from "@/components/ClientHero";
-import HowItWorks from "@/components/HowItWorks";
-import OnlineConsultation from "@/components/OnlineConsultation";
-import FeatureSections from "@/components/FeatureSections";
+"use client";
+
+import React, { useState } from 'react';
+import Footer from '@/components/home/Footer';
+import { LandingNavbar } from '@/components/home/LandingNavbar';
+import { HeroSection } from '@/components/home/HeroSection';
+import { LogoCloud } from '@/components/home/LogoCloud';
+import { FeaturesSection } from '@/components/home/FeaturesSection';
+import AuthModal from '@/components/AuthModal';
+import { useAuthAction } from '@/hooks/useAuthAction';
 
 export default function Home() {
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const { handleAuthAction } = useAuthAction(() => setIsAuthModalOpen(true));
+
   return (
-    <div className="min-h-screen bg-black font-sans selection:bg-blue-900 selection:text-blue-100">
-      <Navbar />
+    <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black font-sans">
+      <LandingNavbar onAuthAction={() => handleAuthAction()} />
       <main>
-        <ClientHero />
-        <HowItWorks />
-        <OnlineConsultation />
-        <FeatureSections />
+        <HeroSection onAuthAction={() => handleAuthAction()} />
+        <LogoCloud />
+        <FeaturesSection onAuthAction={() => handleAuthAction()} />
       </main>
       <Footer />
+      <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
     </div>
   );
 }
