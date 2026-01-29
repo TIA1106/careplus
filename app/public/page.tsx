@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -17,7 +17,7 @@ import {
     Sparkles
 } from "lucide-react";
 
-export default function PublicPage() {
+function PublicPageContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [clinics, setClinics] = useState<any[]>([]);
@@ -317,5 +317,21 @@ export default function PublicPage() {
                 )}
             </div>
         </main>
+    );
+}
+
+export default function PublicPage() {
+    return (
+        <Suspense
+            fallback={
+                <div className="flex h-screen items-center justify-center bg-gray-50">
+                    <div className="text-center">
+                        <div className="inline-block animate-spin rounded-full h-10 w-10 border-4 border-t-blue-600 border-gray-200"></div>
+                    </div>
+                </div>
+            }
+        >
+            <PublicPageContent />
+        </Suspense>
     );
 }
